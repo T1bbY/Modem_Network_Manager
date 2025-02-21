@@ -1,8 +1,20 @@
 import subprocess
 import re
+import json
+import os
+
+def load_config():
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'modem_config.json')
+    with open(config_path, 'r') as file:
+        config = json.load(file)
+    return config
 
 def send_at_command(command):
-    result = subprocess.run(['minicom', '-D', '/dev/ttyUSB2', '-b', '115200', '-C', 'output.txt', '-S', 'at-command'], input=command, text=True)
+    config = load_config()
+    device = config.get('device', '/dev/ttyUSB2')
+    baudrate = config.get('baudrate', '115200')
+    
+    result = subprocess.run(['minicom', '-D', device, '-b', baudrate, '-C', 'output.txt', '-S', 'at-command'], input=command, text=True)
     with open('output.txt', 'r') as file:
         output = file.read()
     return output
