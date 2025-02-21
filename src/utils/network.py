@@ -4,7 +4,7 @@ import json
 import os
 
 def load_config():
-    with open(os.path.join(os.pardir,os.pardir, 'modem_config.cfg'), 'r') as file:
+    with open(os.path.join( 'modem_config.cfg'), 'r') as file:
         config = json.load(file)
     return config
 
